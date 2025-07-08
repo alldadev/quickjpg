@@ -1,0 +1,51 @@
+You are my full-stack engineer. Build “QuickJPG” — a FREE, client-side HEIC/WEBP/PNG → JPG converter with optional batch-conversion subscription (“QuickJPG Pro”). 
+Scope:
+
+1. **Tech stack**
+   • Vite + React 18 + TypeScript
+   • Tailwind for styling (dark neutral bg, #FFB100 accent)
+   • Use `browser-heic-convert` for HEIC and native canvas for WEBP/PNG.
+   • No backend for conversion; all processing in the browser.
+
+2. **UX**
+   • One-page app. Centered drag-&-drop zone (multiple files). 
+   • After drop: thumbnail grid with % progress; on success show “Download JPG”.
+   • Banner “Files never leave your browser” for trust.
+   • Footer links: Privacy | Terms | Contact (stub pages ok).
+
+3. **Monetization hooks**
+   • Insert AdSense snippet placeholder (`<!-- ADSENSE -->`) below hero.
+   • “Go Pro” button (top-right) triggers Stripe Checkout.
+   • If `import.meta.env.VITE_IS_PRO === 'true'` hide ads & show “Pro active”.
+
+4. **Stripe integration**
+   • Use `@stripe/stripe-js` and Hosted Checkout.
+   • Plan name env VITE_STRIPE_PRICE_ID. After payment redirect to `/thanks`.
+   • Generate a Cloudflare Worker (`stripe-webhook.ts`) listening on `/api/stripe-webhook` that 
+     validates webhook signature, marks the customer e-mail in KV Store as PRO.
+   • Use Cloudflare KV namespace `QUICKJPG_PRO_USERS`.
+
+5. **Deploy**
+   • Create `wrangler.toml` pre-configured for Pages → `type = "javascript"` worker.
+   • Add `cloudflare-pages.yml` GitHub workflow: install pnpm, run build, wrangler pages publish.
+   • Output folder `dist/`.
+
+6. **Tests**
+   • Vitest + React Testing Library: test file upload → JPG blob exists, UI updates, download link triggers `URL.createObjectURL`.
+   • E2E Playwright: “convert-file.spec.ts” loads sample.heic fixture, expects a downloadable JPG in <10 s.
+
+7. **Docs**
+   • README.md with local dev (`pnpm dev`), Stripe env setup, and Cloudflare Pages deployment steps.
+   • `/public/sitemap.xml` and `/public/robots.txt` with disallow nothing.
+
+8. **Constraints**
+   • No hard-coded Stripe or AdSense keys; read from env.
+   • Build must pass on Cloudflare Pages free tier (≤ 20 min, ≤ 1 GiB artifacts).
+   • Keep bundle < 300 kB gzipped.
+
+When done:
+   a. Run `pnpm test` (all green).
+   b. Execute `pnpm build`, verify `dist/index.html` contains `<!-- ADSENSE -->`.
+   c. Output the finished project tree and a summary of next steps for me.
+
+Start now, think aloud where helpful, and ask questions only if absolutely blocked. Commit code to the current Git repo and push to origin `main` when all checks pass.

@@ -1,0 +1,128 @@
+● QuickJPG - Technical Summary & Business Use Case
+
+  Business Use Case
+
+  QuickJPG is a privacy-focused, client-side image converter that transforms HEIC, WEBP, and PNG files to JPG format entirely in
+   the user's browser. No files are uploaded to servers, ensuring complete privacy and security.
+
+  Value Proposition:
+
+  - Privacy First: All processing happens locally in the browser
+  - Fast & Free: Instant conversion without server delays
+  - No Sign-up Required: Drag & drop up to 5 images immediately
+  - Freemium Model: Pro version allows up to 20 files vs 5 free
+
+  Target Users:
+
+  - iPhone users with HEIC files needing JPG conversion
+  - Web developers working with WEBP files
+  - Privacy-conscious users who don't want to upload files to servers
+
+  Technical Architecture
+
+  Tech Stack:
+
+  - Frontend: React 18 + TypeScript + Vite
+  - Styling: Tailwind CSS v4 with custom design tokens
+  - Animations: Framer Motion for smooth UX
+  - Image Processing: heic2any library + HTML5 Canvas
+  - Payments: Stripe Checkout for Pro subscriptions
+  - Deployment: Cloudflare Pages with GitHub Actions
+  - Testing: Vitest + React Testing Library + Playwright
+
+  Key Components:
+
+  - Client-side conversion: Uses heic2any for HEIC → JPG
+  - Drag & drop interface: File upload with batch processing
+  - Responsive design: Smallpdf.com-inspired clean aesthetic
+  - SEO optimized: JSON-LD structured data, og:image, meta tags
+
+  Current Issues & Progress
+
+  ✅ Fixed Issues:
+
+  1. GitHub Actions CI/CD: Resolved pnpm/npm conflicts and lockfile compatibility
+  2. Asset serving: Removed problematic _redirects file causing all requests to return HTML
+  3. Deployment pipeline: Successfully deploying to https://quickjpg.pages.dev
+  4. Page loading: Website now loads (was completely blank before)
+
+  🔴 Current Critical Issue: CSS Generation Failure
+
+  Problem: Tailwind CSS is not generating any CSS files, causing the page to display with default HTML styling (oversized
+  elements, no design).
+
+  Root Cause: Custom Tailwind color tokens (bg-primary, text-primary) are not being recognized by Tailwind CSS v4, preventing
+  CSS compilation.
+
+  Error: Cannot apply unknown utility class 'bg-primary'
+
+  Current Status: Page loads but appears unstyled with oversized icons and elements.
+
+  Technical Details:
+
+  Build Output Issue:
+  # Build succeeds but no CSS files generated
+  dist/
+  ├── index.html
+  ├── assets/
+  │   ├── index-CkJh7Gzn.js  ✅ (JavaScript loads)
+  │   ├── react-DY5nchU2.js  ✅ (React loads)
+  │   └── [no CSS files]     ❌ (CSS missing)
+
+  Tailwind Configuration Problem:
+  // tailwind.config.js - Custom colors not recognized
+  colors: {
+    primary: '#FFB100',      // ❌ Not working
+    'primary-hover': '#E69E00', // ❌ Not working
+    // ... other custom colors
+  }
+
+  Component Usage:
+  // Components using unrecognized classes
+  <div className="bg-primary">  // ❌ Causes build failure
+  <div className="text-primary"> // ❌ Causes build failure
+
+  Attempted Solutions
+
+  1. Replaced custom colors: Changed bg-primary to bg-yellow-500 but issue persists
+  2. Inline styles: Added style={{backgroundColor: '#FFB100'}} for critical elements
+  3. Tailwind v4 compatibility: Issue may be related to Tailwind v4 syntax changes
+
+  Next Steps for Resolution
+
+  Immediate Fixes Needed:
+
+  1. Fix Tailwind CSS configuration for v4 compatibility
+  2. Ensure CSS generation works properly
+  3. Test color system with proper Tailwind classes
+
+  Alternative Approaches:
+
+  1. Downgrade to Tailwind v3 if v4 compatibility is too complex
+  2. Use CSS variables instead of Tailwind custom colors
+  3. Implement CSS-in-JS as fallback solution
+
+  Verification Steps:
+
+  1. Build should generate CSS files in dist/assets/
+  2. Page should display with proper styling and colors
+  3. Elements should be properly sized and responsive
+  4. Brand colors (#FFB100) should display correctly
+
+  Deployment Status
+
+  - Domain: https://quickjpg.pages.dev/
+  - Status: ✅ Deployed and accessible
+  - Functionality: ✅ JavaScript loads, React mounts
+  - Styling: ❌ No CSS, unstyled appearance
+  - User Experience: ❌ Poor (oversized elements, no design)
+
+  Business Impact
+
+  - User Experience: Currently poor due to styling issues
+  - Conversion Rate: Will be low until styling is fixed
+  - SEO: Good (proper meta tags, structured data)
+  - Performance: Good (fast loading, client-side processing)
+
+  The primary blocker is the CSS generation issue. Once resolved, the application should provide the intended professional,
+  Smallpdf-inspired user experience.

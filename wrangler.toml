@@ -1,0 +1,8 @@
+name = "quickjpg"
+compatibility_date = "2025-07-08"
+
+[build]
+command = "npm run build"
+cwd = "."
+
+pages_build_output_dir = "dist"
